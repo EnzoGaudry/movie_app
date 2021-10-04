@@ -14,7 +14,6 @@ const HomePage = () => {
   const IMG_API = "https://image.tmdb.org/t/p/w1280";
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [nextPage, setNextPage] = useState(2)
   const [movies, setMovies] = useState([])
   const [category, setCategory] = useState('popularity')
   const [showCategory, setShowCategory] = useState('Popular')
@@ -32,9 +31,7 @@ const HomePage = () => {
           if (currentPage === 1) {
               setMovies(data.results)
           } else {
-              data.results.map (movie => (
-                  movies.push(movie)
-              ))
+            setMovies(movies => [...movies, ...data.results])
           }
       })
     } else if (category === 'popularity') {
@@ -44,9 +41,7 @@ const HomePage = () => {
             if (currentPage === 1) {
                 setMovies(data.results)
             } else {
-                data.results.map (movie => (
-                    movies.push(movie)
-                ))
+                setMovies(movies => [...movies, ...data.results])
             }
         })
     } else {
@@ -56,25 +51,11 @@ const HomePage = () => {
             if (currentPage === 1) {
                 setMovies(data.results)
             } else {
-                data.results.map (movie => (
-                    movies.push(movie)
-                ))
+              setMovies(movies => [...movies, ...data.results])
             }
         })
     }
-  }, [currentPage, category, movies])
-
-  useEffect (() => {
-    fetch(API_SORTBY+category+'.desc&language=en-US&page='+nextPage+API_KEY)
-    .then(res => res.json())
-    .then(data => {
-      if (data.results.length !== 0) {
-        setNextPage(nextPage + 1)
-      } else {
-        setNextPage(null)
-      }
-    })
-  }, [nextPage, category])
+  }, [currentPage, category])
 
   useEffect (() => {
     const current = document.getElementsByClassName('current')
@@ -84,7 +65,6 @@ const HomePage = () => {
 
   const getCategoryChange = (e) => {
     setCurrentPage(1)
-    setNextPage(2)
     if (e === 'vote_average') {
       fetch(API_SORTBY+e+'.desc&vote_count.gte=50&language=en-US&page='+currentPage+API_KEY)
       .then(res => res.json())
@@ -199,7 +179,7 @@ const HomePage = () => {
                 })}
             </div>
             <div className="pagination-content">
-                {(nextPage !== null) ? (<i onClick={() => {handleOnClick(); }}><FaPlusCircle /></i>) : (<div></div>)}
+              <i onClick={() => {handleOnClick(); }}><FaPlusCircle /></i>
             </div>
             <ReactModal ariaHideApp={false} isOpen={showModal}>
                 <div className="modal">
