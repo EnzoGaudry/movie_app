@@ -25,20 +25,6 @@ const HomePage = () => {
   const [movieCast, setMovieCast] = useState([])
 
   useEffect (() => {
-    getMovies()
-    getNextMovies()
-  }, [currentPage])
-
-  useEffect (() => {
-    const current = document.getElementsByClassName('current')
-    current[0].classList.remove('current')
-    getCategoryChange()
-    document.querySelector('div[value="'+category+'"]').classList.add('current')
-  }, [category])
-
-  const getCategoryChange = () => {
-    setCurrentPage(1)
-    setNextPage(2)
     if (category === 'vote_average') {
       fetch(API_SORTBY+category+'.desc&vote_count.gte=50&language=en-US&page='+currentPage+API_KEY)
       .then(res => res.json())
@@ -76,23 +62,43 @@ const HomePage = () => {
             }
         })
     }
-  }
+  }, [currentPage, category, movies])
 
-  const getMovies = () => {
-    if (category === 'vote_average') {
-        fetch(API_SORTBY+category+'.desc&vote_count.gte=50&language=en-US&page='+currentPage+API_KEY)
-        .then(res => res.json())
-        .then(data => {
-            if (currentPage === 1) {
-                setMovies(data.results)
-            } else {
-                data.results.map (movie => (
-                    movies.push(movie)
-                ))
-            }
-        })
-    } else if (category === 'popularity') {
-        fetch(API_SORTBY+category+'.desc&language=en-US&page='+currentPage+API_KEY)
+  useEffect (() => {
+    fetch(API_SORTBY+category+'.desc&language=en-US&page='+nextPage+API_KEY)
+    .then(res => res.json())
+    .then(data => {
+      if (data.results.length !== 0) {
+        setNextPage(nextPage + 1)
+      } else {
+        setNextPage(null)
+      }
+    })
+  }, [nextPage, category])
+
+  useEffect (() => {
+    const current = document.getElementsByClassName('current')
+    current[0].classList.remove('current')
+    document.querySelector('div[value="'+category+'"]').classList.add('current')
+  }, [category])
+
+  const getCategoryChange = (e) => {
+    setCurrentPage(1)
+    setNextPage(2)
+    if (e === 'vote_average') {
+      fetch(API_SORTBY+e+'.desc&vote_count.gte=50&language=en-US&page='+currentPage+API_KEY)
+      .then(res => res.json())
+      .then(data => {
+          if (currentPage === 1) {
+              setMovies(data.results)
+          } else {
+              data.results.map (movie => (
+                  movies.push(movie)
+              ))
+          }
+      })
+    } else if (e === 'popularity') {
+        fetch(API_SORTBY+e+'.desc&language=en-US&page='+currentPage+API_KEY)
         .then(res => res.json())
         .then(data => {
             if (currentPage === 1) {
@@ -104,7 +110,7 @@ const HomePage = () => {
             }
         })
     } else {
-      fetch(API_GENRES+category+'&language=en-US&page='+currentPage+API_KEY)
+      fetch(API_GENRES+e+'&language=en-US&page='+currentPage+API_KEY)
         .then(res => res.json())
         .then(data => {
             if (currentPage === 1) {
@@ -116,18 +122,6 @@ const HomePage = () => {
             }
         })
     }
-  }
-
-  const getNextMovies = () => {
-    fetch(API_SORTBY+category+'.desc&language=en-US&page='+nextPage+API_KEY)
-    .then(res => res.json())
-    .then(data => {
-      if (data.results.length !== 0) {
-        setNextPage(nextPage + 1)
-      } else {
-        setNextPage(null)
-      }
-    })
   }
 
   const handleOnClick = () => {
@@ -185,7 +179,7 @@ const HomePage = () => {
             ))}
           </div>
         </div>
-        <SideBar changeCategory={e => {setShowCategory(e.target.textContent); setCategory(e.target.attributes.value.value)}}/>
+        <SideBar changeCategory={e => {setShowCategory(e.target.textContent); setCategory(e.target.attributes.value.value); getCategoryChange(e.target.attributes.value.value)}}/>
         <div className="content">
             <div className="titles">
                 <h1>{showCategory}</h1>
@@ -205,7 +199,7 @@ const HomePage = () => {
                 })}
             </div>
             <div className="pagination-content">
-                {(nextPage !== null) ? (<i onClick={() => handleOnClick()}><FaPlusCircle /></i>) : (<div></div>)}
+                {(nextPage !== null) ? (<i onClick={() => {handleOnClick(); }}><FaPlusCircle /></i>) : (<div></div>)}
             </div>
             <ReactModal ariaHideApp={false} isOpen={showModal}>
                 <div className="modal">
