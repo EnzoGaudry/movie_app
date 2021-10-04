@@ -1,0 +1,37 @@
+.sidebar {
+    min-width: 18rem;
+    border-style: solid;
+    border-width: 0 0.1rem 0 0;
+    text-align: center;
+    margin-top: 2.5rem;
+}
+
+.sidebar img {
+    width: 12rem;
+    margin-bottom: 1rem;
+}
+
+.genres, .discover {
+    width: 10rem;
+    margin: 2rem auto;
+    text-align: start;
+}
+
+.genres h3, .discover h3 {
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.genre-link, .category-link {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.genre-link:hover, .category-link:hover, .current {
+    background-color: #263238;
+    color: white;
+    border-radius: 1rem;
+}

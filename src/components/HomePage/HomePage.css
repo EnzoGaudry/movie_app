@@ -1,0 +1,251 @@
+.content {
+    padding: 0 4rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2.5rem;
+}
+
+.search {
+    position: absolute;
+    top: 3%;
+    right: 6%;
+    z-index: 90;
+}
+
+.search-bar {
+    display: flex;
+}
+
+.search button {
+    background-color: #263238;
+    border: none;
+    padding: 1rem;
+    border-radius: 0 1rem 1rem 0;
+    outline: none;
+    color: white;
+}
+
+.search button:hover {
+    background-color: #313c41;
+    cursor: pointer;
+}
+
+.search input {
+    background-color: #263238;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 1rem 0 0 1rem;
+    outline: none;
+    color: white;
+    width: 20rem;
+}
+
+.search-results-content {
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 1);
+    text-align: center;
+    margin-left: 2rem;
+    width: 300px;
+}
+
+.search-results {
+    padding: 0.35rem;
+    width: 300px;
+    cursor: pointer;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.search-results:hover {
+    color: white;
+    background-color: #263238;
+}
+
+.titles h1 {
+    font-size: 1.8rem;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.titles h2 {
+    text-transform: uppercase;
+    line-height: 1;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.movie {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    align-items: flex-start;
+}
+
+.movie-card {
+    margin: 1.5rem 2rem;
+    width: 16rem;
+    height: 30rem;
+    text-decoration: none;
+    background-color: transparent;
+    border-radius: 0.8rem;
+    transition: all 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
+    position: relative;
+    transition: all 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.movie-card:hover {
+    transform: scale(1.03);
+    color: white;
+}
+
+.movie-card:hover::after {
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+.movie-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.8rem;
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+    background-color: #37474f;
+    z-index: -99;
+    box-shadow: 0rem 2rem 5rem rgba(0, 0, 0, 0.25);
+    transition: all 100ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.movie-card img {
+    border-radius: 0.8rem;
+    width: 100%;
+    height: 23rem;
+    object-fit: cover;
+}
+
+.movie-card img:hover {
+    border-radius: 0.8rem 0.8rem 0 0;
+}
+
+.movie-card h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.movie-card span {
+    margin-bottom: 1rem;
+}
+
+.movie-card span svg {
+    height: 0.8rem;
+}
+
+.movie-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem;
+    justify-content: space-between;
+}
+
+.pagination-content {
+    text-align: center;
+    font-size: 30px;
+}
+
+.pagination-content i {
+    cursor: pointer;
+}
+
+.ReactModal__Overlay {
+    z-index: 99;
+}
+
+.ReactModal__Content {
+    inset: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.modal {
+    display: flex;
+    height: 100vh;
+    max-width: 80%;
+    margin: auto;
+    flex-wrap: wrap;
+}
+
+.modal img {
+    margin: auto 0;
+    height: 60vh;
+}
+
+.modal-content {
+    width: 70%;
+    margin: auto 0;
+    height: 35rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0 4rem;
+}
+
+.modal-content h1 {
+    font-size: 3rem;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.modal-content h3 {
+    margin-bottom: 1.5rem;
+}
+
+.modal-content h3, .modal-content h4 {
+    text-transform: uppercase;
+    color: #37474f;
+}
+
+.modal-subdata {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+}
+
+.modal-genres-content, .modal-synopsis-content, .modal-actors-content {
+    margin-bottom: 2.5rem;
+}
+
+.modal-genres, .modal-synopsis-content p, .modal-actors {
+    display: flex;
+    margin-top: 0.8rem;
+}
+
+.modal-genre, .modal-actor {
+    margin-right: 1rem;
+}
+
+.modal button {
+    border: none;
+    height: 2rem;
+    width: 2rem;
+}
+
+.modal button svg {
+    width: 100%;
+    height: 100%;
+    color: #263238;
+}
