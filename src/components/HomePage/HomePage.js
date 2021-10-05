@@ -43,6 +43,16 @@ const HomePage = () => {
                 setMovies(movies => [...movies, ...data.results])
             }
         })
+    } else if (category === 'Search') {
+      fetch('https://api.themoviedb.org/3/search/movie?api_key=1a679a2bc4e6ac566c452b0ff2a58eb8&language=en-US&page='+currentPage+'&query='+searchValue)
+      .then(res => res.json())
+      .then(data => {
+          if (currentPage === 1) {
+              setMovies(data.results)
+          } else {
+            setMovies(movies => [...movies, ...data.results])
+          }
+      })
     } else {
       fetch(API_GENRES+category+'&language=en-US&page='+currentPage+API_KEY)
         .then(res => res.json())
@@ -54,12 +64,16 @@ const HomePage = () => {
             }
         })
     }
-  }, [currentPage, category])
+  }, [currentPage, category, searchValue])
 
   useEffect (() => {
-    const current = document.getElementsByClassName('current')
-    current[0].classList.remove('current')
-    document.querySelector('div[value="'+category+'"]').classList.add('current')
+    if (category !== 'Search') {
+      const current = document.getElementsByClassName('current')
+      current[0].classList.remove('current')
+      document.querySelector('div[value="'+category+'"]').classList.add('current')
+    } else {
+      setShowCategory('Search')
+    }
   }, [category])
 
   const getCategoryChange = (e) => {
@@ -107,31 +121,6 @@ const HomePage = () => {
     setCurrentPage(currentPage + 1)
   }
 
-  const search = async (inputValue) => {
-    setSearchValue(inputValue)
-    if (inputValue.length !== 0) {
-      setShowCategory('Search')
-      const response = await fetch('https://api.themoviedb.org/3/search/movie?api_key=1a679a2bc4e6ac566c452b0ff2a58eb8&language=en-US&page=1&query='+inputValue)
-      const json = await response.json()
-
-      if (json.results !== undefined) {
-        setMovies(json.results)
-      }
-
-      if (json.results.length === 0) {
-        setMovies([{title: "No result"}])
-      }
-    } else {
-      setCategory('popularity')
-      setShowCategory('Popular')
-      fetch(API_SORTBY+'popularity.desc&language=en-US&page='+currentPage+API_KEY)
-        .then(res => res.json())
-        .then(data => {
-            setMovies(data.results)
-        })
-    }
-  };
-
   const getMovieInfos = (e) => {
     fetch('https://api.themoviedb.org/3/movie/'+e.getAttribute('data-id')+'?language=en-US'+API_KEY)
     .then(res => res.json())
@@ -145,11 +134,21 @@ const HomePage = () => {
     })
   }
 
+  const emptySearch = () => {
+    setCategory('popularity')
+    setShowCategory('Popular')
+  }
+
+  const search = () => {
+    setCurrentPage(1)
+    setCategory('Search')
+  }
+
   return (
     <div className="container">
         <div className="search">
           <div className="search-bar">
-            <input type="text" value={searchValue} onChange={e => search(e.target.value)}></input>
+            <input type="text" value={searchValue} onChange={e => {setSearchValue(e.target.value); e.target.value.length !== 0 ? search() : emptySearch() }}></input>
             <button><AiOutlineSearch /></button>
           </div>
         </div>
