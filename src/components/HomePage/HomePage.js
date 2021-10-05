@@ -17,7 +17,6 @@ const HomePage = () => {
   const [movies, setMovies] = useState([])
   const [category, setCategory] = useState('popularity')
   const [showCategory, setShowCategory] = useState('Popular')
-  const [searchMovies, setSearchMovies] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [movieInfos, setMovieInfos] = useState([])
@@ -108,28 +107,30 @@ const HomePage = () => {
     setCurrentPage(currentPage + 1)
   }
 
-  const loadOptions = async (inputValue) => {
+  const search = async (inputValue) => {
     setSearchValue(inputValue)
     if (inputValue.length !== 0) {
+      setShowCategory('Search')
       const response = await fetch('https://api.themoviedb.org/3/search/movie?api_key=1a679a2bc4e6ac566c452b0ff2a58eb8&language=en-US&page=1&query='+inputValue)
       const json = await response.json()
 
       if (json.results !== undefined) {
-        setSearchMovies(json.results)
+        setMovies(json.results)
       }
 
       if (json.results.length === 0) {
-        setSearchMovies([{title: "No result"}])
+        setMovies([{title: "No result"}])
       }
     } else {
-      setSearchMovies()
+      setCategory('popularity')
+      setShowCategory('Popular')
+      fetch(API_SORTBY+'popularity.desc&language=en-US&page='+currentPage+API_KEY)
+        .then(res => res.json())
+        .then(data => {
+            setMovies(data.results)
+        })
     }
   };
-
-  const changeInputValue = (e) => {
-    setSearchValue(e)
-    setSearchMovies()
-  }
 
   const getMovieInfos = (e) => {
     fetch('https://api.themoviedb.org/3/movie/'+e.getAttribute('data-id')+'?language=en-US'+API_KEY)
@@ -148,15 +149,8 @@ const HomePage = () => {
     <div className="container">
         <div className="search">
           <div className="search-bar">
-            <input type="text" value={searchValue} onChange={e => loadOptions(e.target.value)}></input>
+            <input type="text" value={searchValue} onChange={e => search(e.target.value)}></input>
             <button><AiOutlineSearch /></button>
-          </div>
-          <div className="search-results-content">
-            {searchMovies && searchMovies.map((movie, index) => (
-              <div className="search-results" onClick={e => changeInputValue(e.target.textContent)} key={index}>
-                {movie.title}
-              </div>
-            ))}
           </div>
         </div>
         <SideBar changeCategory={e => {setShowCategory(e.target.textContent); setCategory(e.target.attributes.value.value); getCategoryChange(e.target.attributes.value.value)}}/>
